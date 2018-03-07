@@ -55,12 +55,6 @@ def customer_user(db):  # pylint: disable=W0613
 
 
 @pytest.fixture
-def customer_client(client, customer_user):
-    client.login(username=customer_user.email, password='password')
-    return client
-
-
-@pytest.fixture
 def request_cart(cart, monkeypatch):
     # FIXME: Fixtures should not have any side effects
     monkeypatch.setattr(
@@ -97,8 +91,10 @@ def admin_user(db):
 
 
 @pytest.fixture()
-def admin_client(client, admin_user):
+def admin_client(admin_user):
     """Return a Django test client logged in as an admin user."""
+    from django.test.client import Client
+    client = Client()
     client.login(username=admin_user.email, password='password')
     return client
 
